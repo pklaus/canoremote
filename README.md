@@ -10,14 +10,14 @@ Should work with any of these:
 
 Tested to work on a Canon EOS 200D.
 
-## Setup
+## Camera Setup
 
 * Open the menu
 * Enter "Wireless communication settings"
 * Enter "Bluetooth function"
 * Set "Bluetooth function" to "Remote"
 * Enter "Pairing" mode (if greyed out, click "Check/clear connection info" and "Clear settings" & "OK", first)
-* When "Pairing in progress" appears, run this tool.
+* When "Pairing in progress" appears, run this tool (eg `./test.py` with adjusted MAC address).
 * The screen will show "Paired with: canoremote"
 * Click OK
 * Exit the menu
@@ -27,7 +27,6 @@ Tested to work on a Canon EOS 200D.
 * Change to movie mode
 * Enter the menu
 * Set "Remote control" to "Enable"
-
 
 ## Resources
 
