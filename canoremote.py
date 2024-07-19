@@ -2,7 +2,7 @@
 
 import bleak, enum
 
-DEVICE_NAME = "canoremote"
+DEVICE_NAME = "AutoShutter"
 
 class Mode(enum.IntEnum):
     Immediate = 0b00001100
@@ -28,15 +28,31 @@ class UUIDCharacteristic(StrEnum):
 
 class CanoRemote(bleak.BleakClient):
 
+    global pairingChar
+    pairingChar = None
+    global eventChar
+    eventChar = None
+
     async def initialize(self):
-        await self.connect()
-        self.services = await self.get_services()
+        #await self.connect(timeout=2)  #It used to be necessary, now it's not.
+        print("Services:")
+        for service in self.services:
+            print(service) 
+            for char in service.characteristics:
+                print("  ",char)
+                if char.uuid == UUIDCharacteristic.Pairing:
+                    pairingChar = char
+                if char.uuid == UUIDCharacteristic.Event:
+                    eventChar = char
+ 
+        print("Matched Characteristics:")
+        print(pairingChar)
+        print(eventChar) 
         data = bytearray([3, ] + list(map(ord, DEVICE_NAME)))
-        await self.write_gatt_char(IntCharacteristic.Pairing, data, response=False)
-        #await self.write_gatt_char("00050002-0000-1000-0000-d8492fffa821", data, response=False)
+        print(data)
+        await self.write_gatt_char(IntCharacteristic.Pairing, data)
 
 
     async def state(self, mode: Mode, button: Button = 0):
         data = bytearray([mode | button])
-        await self.write_gatt_char(IntCharacteristic.Event, data, response=False)
-        #await self.write_gatt_char("00050003-0000-1000-0000-d8492fffa821", data, response=False)
+        await self.write_gatt_char(IntCharacteristic.Event, data)
